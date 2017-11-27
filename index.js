@@ -65,16 +65,16 @@ app.post('/upload', (req, res) => {
 
         fs.writeFileSync('./data/dataconsume.arff', textContent, "utf8");
 
-        /*
-            // SMOer
-            var command = 'java -classpath ./bin/weka.jar weka.Run weka.classifiers.timeseries.WekaForecaster -t ./dataupload/' +
-                files.filetoupload.name + ' -prime 7 -F avg -horizon 3 -future';
-            */
+
+        // SMOer
+        var command = 'java -classpath ./bin/weka.jar weka.Run weka.classifiers.timeseries.WekaForecaster -t ./data/dataconsume.arff' +
+            ' -prime 5 -F avg -horizon 3 -future';
+
 
         // weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8 -num-decimal-places 4
-        var command = 'java -classpath ./bin/weka.jar weka.Run weka.classifiers.timeseries.WekaForecaster -t ./data/dataconsume.arff' +
+        /*var command = 'java -classpath ./bin/weka.jar weka.Run weka.classifiers.timeseries.WekaForecaster -t ./data/dataconsume.arff' +
             ' -prime 7 -F avg -horizon 3 -future -W "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8 -num-decimal-places 4"';
-
+        */
 
         child = exec(command, function(error, stdout, stderr) {
             if (error) {
