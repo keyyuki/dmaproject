@@ -24,6 +24,7 @@
   "homepage": "https://github.com/keyyuki/dmaproject#readme",
   "dependencies": {
     "express": "^4.16.2",
+    "formidable": "^1.1.1",
     "node-arff": "^1.1.0",
     "node-weka": "0.0.8"
   }
