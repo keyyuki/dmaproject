@@ -67,8 +67,9 @@ app.post('/upload', (req, res) => {
 
 
         // SMOer
-        var command = 'java -classpath ./bin/weka.jar weka.Run weka.classifiers.timeseries.WekaForecaster -t ./data/dataconsume.arff' +
-            ' -prime 5 -F avg -horizon 3 -future';
+        var command = 'java -classpath ./bin/weka.jar weka.Run weka.classifiers.timeseries.WekaForecaster ' +
+            '-t ./data/dataconsume.arff -prime 7 -F avg -horizon 3 -future ' +
+            '-W "SMOreg - C 1.0 - N 0 - I\ "RegSMOImproved -T 0.001 -V -P 1.0E-12 -L 0.001 -W 1\" -K \"weka.classifiers.functions.supportVector.PolyKernel -E 1.0 -C 250007\""';
 
 
         // weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8 -num-decimal-places 4
