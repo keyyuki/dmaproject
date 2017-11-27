@@ -1,0 +1,30 @@
+{
+  "name": "dmaproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keyyuki/dmaproject.git"
+  },
+  "keywords": [
+    "data",
+    "mining",
+    "stock",
+    "prediction"
+  ],
+  "author": "KienNN",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/keyyuki/dmaproject/issues"
+  },
+  "homepage": "https://github.com/keyyuki/dmaproject#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "node-arff": "^1.1.0",
+    "node-weka": "0.0.8"
+  }
+}
