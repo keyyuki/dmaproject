@@ -9,7 +9,7 @@ const app = express();
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 
-})
+});
 
 app.post('/upload', (req, res) => {
 
@@ -27,41 +27,66 @@ app.post('/upload', (req, res) => {
             return;
         }
 
-        fs.rename(files.filetoupload.path, './dataupload/' + files.filetoupload.name, () => {
-            /*
+        var content = fs.readFileSync(files.filetoupload.path, "utf8");
+
+
+        var lines = content.split("\n");
+        var totalLine = lines.length;
+        var dataToFile = [];
+        var lastValue = '';
+        lines.forEach((line, index) => {
+            if (index <= 1) {
+                return;
+            }
+            var values = line.split(/,/g);
+            var stt = totalLine - index;
+            var value = values[9];
+            if (value) {
+                lastValue = value.trim();
+            } else {
+                value = lastValue;
+            }
+            dataToFile.push(stt + ',' + value);
+        })
+        dataToFile = dataToFile.reverse();
+
+        // generate arff file
+
+        var textContent = "@relation dataconsume\n\n";
+        textContent += "@attribute STT numeric\n";
+        textContent += "@attribute avg numeric\n";
+        textContent += "\n";
+        textContent += "@data\n";
+        textContent += dataToFile.join("\n");
+
+        fs.writeFileSync('./data/dataconsume.arff', textContent, "utf8");
+
+        /*
             // SMOer
             var command = 'java -classpath ./bin/weka.jar weka.Run weka.classifiers.timeseries.WekaForecaster -t ./dataupload/' +
                 files.filetoupload.name + ' -prime 7 -F avg -horizon 3 -future';
             */
 
-            // weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8 -num-decimal-places 4
-            var command = 'java -classpath ./bin/weka.jar weka.Run weka.classifiers.timeseries.WekaForecaster -t ./dataupload/' +
-                files.filetoupload.name + ' -prime 7 -F avg -horizon 3 -future -W "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8 -num-decimal-places 4"';
+        // weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8 -num-decimal-places 4
+        var command = 'java -classpath ./bin/weka.jar weka.Run weka.classifiers.timeseries.WekaForecaster -t ./data/dataconsume.arff' +
+            ' -prime 7 -F avg -horizon 3 -future -W "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8 -num-decimal-places 4"';
 
 
-            child = exec(command, function(error, stdout, stderr) {
-                if (error) {
-                    console.log(error)
-                    res.send('Error');
-                    return;
-                }
-
-                res.send('<pre>' + stdout + '</pre>');
+        child = exec(command, function(error, stdout, stderr) {
+            if (error) {
+                console.log(error);
+                fs.unlinkSync(files.filetoupload.path);
+                res.send('Error');
                 return;
-            });
+            }
+            fs.unlinkSync(files.filetoupload.path);
+            res.send('<pre>' + stdout + '</pre>');
+            return;
         });
+
         return;
-        var oldpath = files.filetoupload.path;
-
-
-
-
     })
-
-
-
 });
-
 
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
