@@ -38,7 +38,11 @@ app.post('/upload', (req, res) => {
             if (index <= 1) {
                 return;
             }
+
             var values = line.split(/,/g);
+            if (!values[0] || !values[0].trim()) {
+                return;
+            }
             var stt = totalLine - index;
             var value = values[9];
             if (value) {
