@@ -68,14 +68,15 @@ app.post('/upload', (req, res) => {
 
         // SMOer
         var command = 'java -classpath ./bin/weka.jar weka.Run weka.classifiers.timeseries.WekaForecaster ' +
-            '-t ./data/dataconsume.arff -prime 7 -F avg -horizon 3 -future ' +
-            '-W "SMOreg - C 1.0 - N 0 - I\ "RegSMOImproved -T 0.001 -V -P 1.0E-12 -L 0.001 -W 1\" -K \"weka.classifiers.functions.supportVector.PolyKernel -E 1.0 -C 250007\""';
+            '-t ./data/dataconsume.arff -prime 5 -F avg -horizon 3 -future';
 
-
+        /*
+        var command = 'java -classpath ./bin/weka.jar weka.Run weka.classifiers.timeseries.WekaForecaster -t ./data/dataconsume.arff -prime 5 -F avg -horizon 3 -future -W "GaussianProcesses -L 1.0 -N 0 -K \"weka.classifiers.functions.supportVector.PolyKernel -E 1.0 -C 250007\" -S 1"';
+        */
         // weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8 -num-decimal-places 4
         /*var command = 'java -classpath ./bin/weka.jar weka.Run weka.classifiers.timeseries.WekaForecaster -t ./data/dataconsume.arff' +
-            ' -prime 7 -F avg -horizon 3 -future -W "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8 -num-decimal-places 4"';
-        */
+            ' -prime 5 -F avg -horizon 3 -future -W "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8 -num-decimal-places 4"';*/
+
 
         child = exec(command, function(error, stdout, stderr) {
             if (error) {
@@ -85,7 +86,12 @@ app.post('/upload', (req, res) => {
                 return;
             }
             fs.unlinkSync(files.filetoupload.path);
-            res.send('<pre>' + stdout + '</pre>');
+            if(stdout){
+                res.send('<pre>' + stdout + '</pre>');
+            } else {
+                res.send('<pre>' + stderr + '</pre>');
+            }
+
             return;
         });
 
