@@ -48,3 +48,4 @@ VD:
 
 Upload file csv lên form upload của chương trình, bấm submit, hệ thống sẽ tự in ra số liệu dự đoán trong 3 ngày tiếp theo
 
+Ngoài ra trong thư mục dataupload có sẵn 1 file mẫu, có thể dùng để upload ngay dc
